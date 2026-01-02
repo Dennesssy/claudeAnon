@@ -1,3 +1,7 @@
+<!--
+Made for https://www.twitch.tv/theo
+-->
+
 # claudeAnon
 
 > Run Claude Code with the official Anthropic API but **hide your email** from the session header.
@@ -17,6 +21,7 @@ Ever noticed how Claude Code displays your email in the header when using the of
 
 ```
 claudeAnon/
+├── quick-anon.sh            # Quick config edit (no install, fastest)
 ├── email-hiding-proxy.js   # Node.js proxy server (intercepts /v1/account)
 ├── claudeanon.sh           # Bash wrapper (starts proxy + launches Claude)
 ├── install.sh              # Quick installer (copies files, adds alias)
@@ -25,7 +30,35 @@ claudeAnon/
 
 ## 🚀 Quick Start
 
-### Option 1: Clone and Install (Recommended)
+### ⚡ Option 0: Quick Config Edit (Fastest, No Install)
+
+**Just edit your local config file directly:**
+
+```bash
+# Use the provided script (recommended)
+./quick-anon.sh
+
+# Or with custom email
+./quick-anon.sh "your@fake.email"
+
+# Or one-liner manually
+jq '.oauthAccount.emailAddress = "anonymous@claude.local"' ~/.claude.json > /tmp/claude.json.tmp && mv /tmp/claude.json.tmp ~/.claude.json
+```
+
+**Pros:**
+- ✅ Fastest method (one command)
+- ✅ No Node.js required
+- ✅ No proxy to manage
+- ✅ Works immediately
+
+**Cons:**
+- ⚠️ May be overwritten by Claude when it updates config
+- ⚠️ Only affects display, not API calls
+- ⚠️ Requires `jq` installed
+
+---
+
+### Option 1: Clone and Install (Proxy Method, Robust)
 
 ```bash
 # Clone the repo
@@ -289,12 +322,13 @@ PROXY_PORT=3739 ./claudeanon.sh
 
 ## 📊 Comparison with Alternatives
 
-| Method | Email Hidden | Full API Access | Setup Difficulty |
-|--------|--------------|-----------------|------------------|
-| **claudeAnon** | ✅ Yes | ✅ Yes (Anthropic) | Easy (script) |
-| **Use Z.ai/Groq/etc** | ✅ Yes | ⚠️ Partial (different models) | Easy |
-| **No proxy** | ❌ No | ✅ Yes (Anthropic) | Easiest |
-| **Custom CLI build** | ✅ Yes | ✅ Yes | Hard (fork + compile) |
+| Method | Email Hidden | Full API Access | Setup Difficulty | Permanence |
+|--------|--------------|-----------------|------------------|------------|
+| **Config Edit** | ✅ Yes | ✅ Yes (Anthropic) | Trivial (one command) | ⚠️ May reset |
+| **claudeAnon Proxy** | ✅ Yes | ✅ Yes (Anthropic) | Easy (script) | ✅ Permanent |
+| **Use Z.ai/Groq/etc** | ✅ Yes | ⚠️ Partial (different models) | Easy | ✅ Permanent |
+| **No proxy** | ❌ No | ✅ Yes (Anthropic) | Easiest | ✅ Permanent |
+| **Custom CLI build** | ✅ Yes | ✅ Yes | Hard (fork + compile) | ✅ Permanent |
 
 ## 🤝 Contributing
 
